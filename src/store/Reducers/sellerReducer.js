@@ -1,11 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import api from '../../api/api'
+
+import axios from "axios";
+import { base_url } from '../../utils/config';
 
 export const get_seller_request = createAsyncThunk(
     'seller/get_seller_request',
-    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+    const config = {
+       headers: {
+          Authorization: `Bearer ${token}`,
+       },
+    };
         try {
-            const { data } = await api.get(`/request-seller-get?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, { withCredentials: true })
+            const { data } = await axios.get(`${base_url}/api/request-seller-get?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -15,9 +23,15 @@ export const get_seller_request = createAsyncThunk(
 
 export const get_seller = createAsyncThunk(
     'seller/get_seller',
-    async (sellerId, { rejectWithValue, fulfillWithValue }) => {
+    async (sellerId, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data } = await api.get(`/get-seller/${sellerId}`, { withCredentials: true })
+            const { data } = await axios.get(`${base_url}/api/get-seller/${sellerId}`, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -27,9 +41,15 @@ export const get_seller = createAsyncThunk(
 
 export const seller_status_update = createAsyncThunk(
     'seller/seller_status_update',
-    async (info, { rejectWithValue, fulfillWithValue }) => {
+    async (info, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data } = await api.post(`/seller-status-update`, info, { withCredentials: true })
+            const { data } = await axios.post(`${base_url}/api/seller-status-update`, info, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -40,9 +60,15 @@ export const seller_status_update = createAsyncThunk(
 
 export const get_active_sellers = createAsyncThunk(
     'seller/get_active_sellers',
-    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data } = await api.get(`/get-sellers?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, { withCredentials: true })
+            const { data } = await axios.get(`${base_url}/api/get-sellers?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -53,9 +79,15 @@ export const get_active_sellers = createAsyncThunk(
 
 export const get_deactive_sellers = createAsyncThunk(
     'seller/get_active_sellers',
-    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data } = await api.get(`/get-deactive-sellers?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, { withCredentials: true })
+            const { data } = await axios.get(`${base_url}/api/get-deactive-sellers?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -65,9 +97,15 @@ export const get_deactive_sellers = createAsyncThunk(
 
 export const create_stripe_connect_account = createAsyncThunk(
     'seller/create_stripe_connect_account',
-    async () => {
+    async (getState) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data: { url } } = await api.get(`/payment/create-stripe-connect-account`, { withCredentials: true })
+            const { data: { url } } = await axios.get(`${base_url}/api/payment/create-stripe-connect-account`, config)
             window.location.href = url
            // return fulfillWithValue(data)
         } catch (error) {
@@ -78,9 +116,15 @@ export const create_stripe_connect_account = createAsyncThunk(
 
 export const active_stripe_connect_account = createAsyncThunk(
     'seller/active_stripe_connect_account',
-    async (activeCode, { rejectWithValue, fulfillWithValue }) => {
+    async (activeCode, { rejectWithValue, fulfillWithValue,getState }) => {
+        const {token} =getState().auth
+        const config = {
+           headers: {
+              Authorization: `Bearer ${token}`,
+           },
+        };
         try {
-            const { data } = await api.put(`/payment/active-stripe-connect-account/${activeCode}`, {}, { withCredentials: true })
+            const { data } = await axios.put(`${base_url}/api/payment/active-stripe-connect-account/${activeCode}`, {}, config)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
